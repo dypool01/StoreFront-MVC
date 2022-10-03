@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreFront", "StoreFront\StoreFront.csproj", "{7839E049-B7E3-4C4F-B51C-8458DE644ACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreFront.DATA.EF", "StoreFront.DATA.EF\StoreFront.DATA.EF.csproj", "{A79C7ED1-C3CB-416C-934D-FF0E902F0B07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7839E049-B7E3-4C4F-B51C-8458DE644ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7839E049-B7E3-4C4F-B51C-8458DE644ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7839E049-B7E3-4C4F-B51C-8458DE644ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7839E049-B7E3-4C4F-B51C-8458DE644ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A79C7ED1-C3CB-416C-934D-FF0E902F0B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79C7ED1-C3CB-416C-934D-FF0E902F0B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79C7ED1-C3CB-416C-934D-FF0E902F0B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79C7ED1-C3CB-416C-934D-FF0E902F0B07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B203759E-FA37-446C-A059-CAD65015243B}
+	EndGlobalSection
+EndGlobal
