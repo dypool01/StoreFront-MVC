@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace StoreFront.Data
+namespace StoreFront.UI.MVC.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
