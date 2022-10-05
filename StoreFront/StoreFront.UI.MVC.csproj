@@ -12,6 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Administration\CreateRole.cshtml" />
+    <None Include="Views\Administration\EditRole.cshtml" />
+    <None Include="Views\Administration\EditUser.cshtml" />
+    <None Include="Views\Administration\EditUserRoles.cshtml" />
+    <None Include="Views\Administration\EditUsersInRole.cshtml" />
+    <None Include="Views\Administration\ListRoles.cshtml" />
+    <None Include="Views\Administration\ListUsers.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Privacy.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
@@ -30,6 +37,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StoreFront.DATA.EF\StoreFront.DATA.EF.csproj" />
   </ItemGroup>
 
 </Project>
