@@ -52,6 +52,10 @@ namespace StoreFront.DATA.EF.Metadata
 
 
         public int StatusID { get; set; }
+
+        [Display(Name = "Image")]
+        [StringLength(100, ErrorMessage = "*Cannot exceed 100 characters")]
+        public string? ProductImage { get; set; }
     }//end ProductMetadata
 
     public class ProductStockStatusMetadata
