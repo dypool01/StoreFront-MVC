@@ -11,7 +11,7 @@ namespace StoreFront.DATA.EF.Models
         public short QuantityPerUnit { get; set; }
         public decimal? UnitPrice { get; set; }
         public int? StatusId { get; set; }
-        public string ProductImage { get; set; }
+        public string ProductImage { get; set; } = null!;
 
         public virtual Category Category { get; set; } = null!;
         public virtual ProductStockStatus? Status { get; set; }

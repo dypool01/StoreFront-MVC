@@ -598,6 +598,12 @@ progress {
   content: "— ";
 }
 
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
