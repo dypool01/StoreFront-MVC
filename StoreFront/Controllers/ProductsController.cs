@@ -58,7 +58,7 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId,ProductImage")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId,ProductImage")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -169,6 +169,5 @@ namespace StoreFront.UI.MVC.Controllers
         {
           return _context.Products.Any(e => e.ProductId == id);
         }
-
     }
 }

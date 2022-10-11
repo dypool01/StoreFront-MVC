@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
 
+using Microsoft.AspNetCore.Authorization; //Added for access to [Authorize]   
+using System.Drawing.Drawing2D;
+using System.Drawing; //Added for access to the Image class
+
+
+
 namespace StoreFront.UI.MVC.Controllers
 {
     public class ProductStockStatusController : Controller
