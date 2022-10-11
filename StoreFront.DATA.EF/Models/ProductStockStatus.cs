@@ -14,6 +14,7 @@ namespace StoreFront.DATA.EF.Models
         public bool LimitedStock { get; set; }
         public bool ReStocking { get; set; }
         public bool Discontinued { get; set; }
+        public string? StatusName { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }
