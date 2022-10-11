@@ -25,6 +25,7 @@ namespace StoreFront.DATA.EF.Models
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductStockStatus> ProductStockStatuses { get; set; } = null!;
+        public virtual DbSet<UserDetail> UserDetails { get; set; } = null!;
         public virtual DbSet<VwStoreFront> VwStoreFronts { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,7 +33,7 @@ namespace StoreFront.DATA.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;database=StoreFront;trusted_connection=true;multipleactiveresultsets=true;");
+                optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=StoreFront;trusted_connection=true;multipleactiveresultsets=true;");
             }
         }
 
@@ -144,6 +145,8 @@ namespace StoreFront.DATA.EF.Models
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
+                entity.Property(e => e.ProductImage).HasMaxLength(100);
+
                 entity.Property(e => e.ProductName).HasMaxLength(50);
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
@@ -159,6 +162,7 @@ namespace StoreFront.DATA.EF.Models
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Statuses");
             });
 
@@ -168,6 +172,47 @@ namespace StoreFront.DATA.EF.Models
                     .HasName("PK_Statuses");
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<UserDetail>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.UserId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("UserID");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.City)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FirstName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(24)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.State)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Zip)
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<VwStoreFront>(entity =>

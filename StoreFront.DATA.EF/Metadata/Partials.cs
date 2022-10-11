@@ -24,4 +24,7 @@ namespace StoreFront.DATA.EF.Models//.Metadata
 
     public partial class ProductStockStatus { }
 
+    [ModelMetadataType(typeof(UserDetailsMetadata))]
+    public partial class UserDetail { }
+
 }//end namespace

@@ -72,4 +72,29 @@ namespace StoreFront.DATA.EF.Metadata
         public bool Discontinued { get; set; }
     }//end ProductStockStatusMetadata
 
+    public class UserDetailsMetadata
+    {
+        public string UserId { get; set; } = null!;
+        [StringLength(50)]
+        [Display(Name = "First Name")]
+        [Required]
+        public string FirstName { get; set; } = null!;
+        [StringLength(50)]
+        [Display(Name = "Last Name")]
+        [Required]
+        public string LastName { get; set; } = null!;
+        [StringLength(150)]
+        public string? Address { get; set; }
+        [StringLength(50)]
+        public string? City { get; set; }
+        [StringLength(2)]
+        public string? State { get; set; }
+        [StringLength(5)]
+        [DataType(DataType.PostalCode)]
+        public string? Zip { get; set; }
+        [StringLength(24)]
+        [DataType(DataType.PhoneNumber)]
+        public string? Phone { get; set; }
+    }
+
 }
