@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,13 @@ namespace StoreFront.UI.MVC.Controllers
     public class ProductsController : Controller
     {
         private readonly StoreFrontContext _context;
+        //added prop below for access to the wwwroot folder
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public ProductsController(StoreFrontContext context)
+        public ProductsController(StoreFrontContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            this.webHostEnvironment = webHostEnvironment;//added
         }
 
         // GET: Products
@@ -43,6 +48,18 @@ namespace StoreFront.UI.MVC.Controllers
             }
 
             return View(product);
+        }
+
+        // We filtered the Index() to show ONLY active (aka NOT discontinued) products.
+        // We need a view where we can also view the items that were discontinued...
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Discontinued()
+        {
+            var products = _context.Products.Where(p => p.StatusId == 3)
+
+            .Include(p => p.Category);
+            return View(await products.ToListAsync());
+            //to create this view, we added the action, right click -> add View and selected the List template
         }
 
         // GET: Products/Create

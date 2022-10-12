@@ -5,7 +5,12 @@ namespace StoreFront.DATA.EF.Models
 {
     public partial class UserDetail
     {
-        public string UserId { get; set; }
+        public UserDetail()
+        {
+            Orders = new HashSet<Order>();
+        }
+
+        public string UserId { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string? Address { get; set; }
@@ -13,5 +18,7 @@ namespace StoreFront.DATA.EF.Models
         public string? State { get; set; }
         public string? Zip { get; set; }
         public string? Phone { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

@@ -23,6 +23,8 @@ namespace StoreFront.DATA.EF.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderProduct> OrderProducts { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductStockStatus> ProductStockStatuses { get; set; } = null!;
         public virtual DbSet<UserDetail> UserDetails { get; set; } = null!;
@@ -33,7 +35,7 @@ namespace StoreFront.DATA.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=StoreFront;trusted_connection=true;multipleactiveresultsets=true;");
+                optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=StoreFront;trusted_connection=true;MultipleActiveResultSets=true;");
             }
         }
 
@@ -139,6 +141,64 @@ namespace StoreFront.DATA.EF.Models
                 entity.Property(e => e.Description).HasMaxLength(500);
             });
 
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.OrderDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ShipCity)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ShipState)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ShipToName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ShipZip)
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(450)
+                    .HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_UserDetails");
+            });
+
+            modelBuilder.Entity<OrderProduct>(entity =>
+            {
+                entity.Property(e => e.OrderProductId).HasColumnName("OrderProductID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.ProductPrice).HasColumnType("money");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderProducts)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderProducts_Orders");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderProducts_Products");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
@@ -180,9 +240,7 @@ namespace StoreFront.DATA.EF.Models
             {
                 entity.HasKey(e => e.UserId);
 
-                entity.Property(e => e.UserId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("UserID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.Property(e => e.Address)
                     .HasMaxLength(150)
