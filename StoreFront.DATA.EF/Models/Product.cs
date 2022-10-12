@@ -5,6 +5,11 @@ namespace StoreFront.DATA.EF.Models
 {
     public partial class Product
     {
+        public Product()
+        {
+            OrderProducts = new HashSet<OrderProduct>();
+        }
+
         public int ProductId { get; set; }
         public string? ProductName { get; set; }
         public int CategoryId { get; set; }
@@ -15,5 +20,6 @@ namespace StoreFront.DATA.EF.Models
 
         public virtual Category Category { get; set; } = null!;
         public virtual ProductStockStatus Status { get; set; } = null!;
+        public virtual ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }
