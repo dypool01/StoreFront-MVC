@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
+using X.PagedList;//Paged list - step 2
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -60,6 +61,79 @@ namespace StoreFront.UI.MVC.Controllers
             .Include(p => p.Category);
             return View(await products.ToListAsync());
             //to create this view, we added the action, right click -> add View and selected the List template
+        }
+
+        #region Filter/Paging Steps
+        //---- SEARCH ----//
+        //1) Create form in the view (for the SEARCH portion, only need 1 textbox and a submit button - <select> will be added later)
+        //2) Update controller Action ([A] add param, [B]add search filter logic)
+
+        //---- DDL ----//
+        //1) Create ViewData[] object in Controller action (this sends DDL list to the View)
+        //2) Add <select> inside of <form>
+        //3) Update Controller Action ([A] add param, [B] add category filter logic)
+
+        //---- PAGED LIST ----//
+        //1) Install package for X.PagedList.Mvc.Core
+        //      - Open Package Manger Console -> select the UI project -> install-package x.pagedlist.mvc.core
+        //2) Add using statements and update model declaration in the View
+        //3) Add param to Controller Action
+        //4) Add page size variable in Action
+        //5) Update return statement in Controller Action
+        //6) Add Counter in View
+
+        // 7) Create a new CSS file in wwwroot/css named 'PagedList.css'
+        //      - NOTE: may need to go to the package's NuGet page and copy the CSS directly OR copy from an existing project :)
+        //      - X.PagedList CSS file link (go here to copy the code): https://github.com/dncuug/X.PagedList/blob/master/examples/X.PagedList.Mvc.Example.Core/wwwroot/css/PagedList.css
+        // 8) Add a <link> to the _Layout referencing 'PagedList.css'
+        #endregion
+
+        //Created a separate action that returns the same results as Index, but in the View
+        //we will use a tiled layout instead of a table
+        public async Task<IActionResult> TiledProducts(string searchTerm, int categoryId = 0, int page = 1)
+        {
+            int pageSize = 6;
+
+            var products = _context.Products.Where(p => !p.Status.Discontinued == true)
+                .Include(p => p.Category).ToList();
+
+            // DDL - Step 1
+            // Note: we copied this line from the existing functionality in Products.Create()
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+
+
+            // DDL - Step 3
+            // Add logiic to filter the results by categoryId
+            #region Optiional Category Filter
+            if (categoryId != 0)
+            {
+                products = products.Where(p => p.CategoryId == categoryId).ToList();
+                // Recreate the dropdown list so the current category is still selected
+                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            }
+            #endregion
+
+
+            //Search - Step 2.B
+            #region Optional Search Filter
+            if (!String.IsNullOrEmpty(searchTerm))
+            {
+                products = products.Where(p =>
+                                    p.ProductName.ToLower().Contains(searchTerm.ToLower())
+                                    || p.Category.CategoryName.ToLower().Contains(searchTerm.ToLower())).ToList();
+
+                ViewBag.SearchTerm = searchTerm;
+                ViewBag.NbrResults = products.Count;
+
+            }
+            else
+            {
+                ViewBag.SearchTerm = null;
+                ViewBag.NbrResults = products.Count;
+            }
+            #endregion
+
+            return View(products.ToPagedList(page, pageSize));
         }
 
         // GET: Products/Create
