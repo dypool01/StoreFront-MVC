@@ -4,19 +4,40 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@*<h1>Index</h1>*@
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
+</p>*@
+
+<section class="product_section layout-padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Shop <span>Equipment</span>
+            </h2>
+
+<p align="center">
+    @if (User.IsInRole("Admin"))
+    {
+        //The pipe delimiters (|) that were outside of the <a> tags were causing intellisense to
+        //assume we were switching BACK to C# mode.
+        //To make sure intellisense renders these as text and NOT c#, we can wrap everything in a <span>
+        <span>
+            <a asp-action="Create">Add New Gadget</a> |
+            <a asp-action="Discontinued">Discontinued Gadgets</a> |
+        </span>
+    }
+    <a asp-action="TiledProducts">Tile View</a>
 </p>
+
+        </div>
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QuantityPerUnit)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UnitPrice)
@@ -25,11 +46,14 @@
                 @Html.DisplayNameFor(model => model.ProductImage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Category.CategoryName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.Status.Discontinued)
             </th>
+           @* <th>
+                @Html.DisplayNameFor(model => )
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -52,7 +76,7 @@
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.StatusId)
+                @Html.DisplayFor(modelItem => item.Status.Discontinued)
             </td>
 
             <td>
@@ -85,3 +109,14 @@
 }
     </tbody>
 </table>
+
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+        });
+    </script>
+}
