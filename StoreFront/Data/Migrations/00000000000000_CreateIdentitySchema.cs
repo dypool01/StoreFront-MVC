@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace StoreFront.Data.Migrations
+namespace StoreFront.UI.MVC.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

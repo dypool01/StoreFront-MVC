@@ -2563,6 +2563,12 @@ textarea.form-control-lg {
   margin-right: 1rem;
 }
 
+.btn-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 45px;
+}
+
 .btn-check {
   position: absolute;
   clip: rect(0, 0, 0, 0);

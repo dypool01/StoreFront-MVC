@@ -4,6 +4,20 @@
     ViewData["Title"] = "Register";
 }
 
+@{
+    /*
+    * Steps to Extend Identity (aka Custom User Details)
+    * - Preqreq: must have a table in the DB available to store the extra user info (in GadgetStore, that's what we use UserDetails for).
+    * 1) (code-behind) Add properties to the InputModel to map our UserDetails properties
+    * 2) (view) Add textboxes for the new properties
+    * 3) (code-behind) Create the StoreFrontContext object and UserDetails object in the OnPostAsync()
+    *      a) Add 'using [ProjName].DATA.EF.Models;'
+    *      b) Instantiate new UserDetail object && GadgetStoreContext object
+    *      c) Assign values to the UserDetail object
+    *      d) Use the _context to save the UserDetails object to the DB
+    */
+}
+
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">

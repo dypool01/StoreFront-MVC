@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<StoreFront.DATA.EF.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shop Equipment";
 }
 
 @*<h1>Index</h1>*@
@@ -70,7 +70,8 @@
                 @Html.DisplayFor(modelItem => item.UnitPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductImage)
+                @*@Html.DisplayFor(modelItem => item.ProductImage)*@
+                <img src="~/img/@item.ProductImage" class="img-fluid" alt="@item.ProductName" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
