@@ -3,10 +3,10 @@
 *@
 @model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
 @{
-    ViewData["Title"] = "List Roles";
+    ViewData["Title"] = "List Of Roles";
 }
 
-<h1>Roles</h1>
+<h1>@ViewData["Title"]</h1>
 
 
 @if (Model.Any())
