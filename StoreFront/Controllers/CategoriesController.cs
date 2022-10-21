@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
 
-namespace StoreFront.UI.MVC.Controllers
+namespace StoreFront.Controllers
 {
     public class CategoriesController : Controller
     {

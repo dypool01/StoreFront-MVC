@@ -2,7 +2,7 @@
 using System.Drawing.Drawing2D;
 using System.Drawing;
 
-namespace StoreFront.UI.MVC.Utilities
+namespace StoreFront.Utilities
 {
     public class ImageUtility
     {

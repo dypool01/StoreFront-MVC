@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreFront.Data;
-using StoreFront.UI.MVC.Data;
 
-namespace StoreFront.UI.MVC.Data.Migrations
+namespace StoreFront.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
