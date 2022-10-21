@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace StoreFront.UI.MVC.Controllers//Update namespace
+namespace StoreFront.UI.MVC.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
@@ -72,7 +72,7 @@ namespace StoreFront.UI.MVC.Controllers//Update namespace
             {
                 user.Email = model.Email;
                 user.UserName = model.UserName;
-                //user.City = model.City; // TODO: fix city
+                
 
                 var result = await userManager.UpdateAsync(user);
 

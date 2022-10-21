@@ -7,7 +7,7 @@
 
 
 @{
-    ViewData["Title"] = "Shop Gear";
+    ViewData["Title"] = "Shop Equipment";
 }
 
 
@@ -25,8 +25,8 @@
             @if (User.IsInRole("Admin"))
             {
                 <span>
-                    <a asp-action="Create">Add New Gadget</a> |
-                    <a asp-action="Discontinued">Discontinued Gadgets</a> |
+                    <a asp-action="Create">Add New Equipment</a> |
+                    <a asp-action="Discontinued">Discontinued Equipment</a> |
                 </span>
             }
             <a asp-action="Index">Table View</a>
@@ -45,7 +45,7 @@
                     the 'name' attribute of this textbox MUST match the parameter name in the TiledProducts() action.
                     *@
                     <input type="text" name="searchTerm" placeholder="Search products" class="form-control text-center" value="@ViewBag.SearchTerm" />
-                    <input type="submit" value="Apply Filter" class="offset-3 btn btn-primary w-50 d-block" />
+                    <input type="submit" value="Apply Filter" class="mt-3 offset-3 btn btn-primary w-50 d-block" />
                 </form>
 
                 @if (ViewBag.NbrResults != null)
@@ -63,7 +63,7 @@
                     <div class="box">
                         <div class="option_container">
                             <div class="options">
-                                <a href="" class="option1">
+                                <a asp-action="Details" asp-route-id="@item.ProductId" class="option1">
                                     @item.ProductName
                                 </a>
                                 @if (item.QuantityPerUnit > 0)
@@ -81,10 +81,10 @@
 
                             </div>
                         </div>
-                        <div class="img-box">
+                        <div class="card-img">
                             <img src="~/images/@item.ProductImage" alt="@item.ProductName">
                         </div>
-                        <div class="detail-box">
+                        <div class="card-footer">
                             <h5>
                                 @item.ProductName
                             </h5>
@@ -109,7 +109,7 @@
         </div>
         <div class="btn-box">
             <a asp-action="TiledProducts">
-                View All products
+                View All Products
             </a>
         </div>
     </div>

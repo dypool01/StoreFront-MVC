@@ -3,11 +3,11 @@
 *@
 @model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "List Of Users";
 }
 
 
-<h1>All Users</h1>
+<h1>@ViewData["Title"]</h1>
 
 @if (Model.Any())
 {
