@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore; //Added to address error with primary key for CVM
 using System.ComponentModel.DataAnnotations;
 
-namespace StoreFront.UI.MVC.Models
+namespace StoreFront.Models
 {
     [Keyless]
     public class ContactViewModel

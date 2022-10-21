@@ -16,6 +16,6 @@ namespace StoreFront.DATA.EF.Models
         public bool Discontinued { get; set; }
         public string? StatusName { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Product> Products { get; set; } = null!;
     }
 }

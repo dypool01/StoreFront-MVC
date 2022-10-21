@@ -1,9 +1,9 @@
-﻿using StoreFront.UI.MVC.Models;
+﻿using StoreFront.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace StoreFront.UI.MVC.Controllers
+namespace StoreFront.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller

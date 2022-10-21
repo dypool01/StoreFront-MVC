@@ -1,7 +1,7 @@
-﻿using StoreFront.UI.MVC.Models;
+﻿using StoreFront.Models;
 using StoreFront.DATA.EF.Models;//added for access to product
 
-namespace StoreFront.UI.MVC.Models
+namespace StoreFront.Models
 {
     public class CartItemViewModel
     {

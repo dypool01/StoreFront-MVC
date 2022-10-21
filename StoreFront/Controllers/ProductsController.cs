@@ -11,9 +11,9 @@ using StoreFront.DATA.EF.Models;
 using X.PagedList;//Paged list - step 2
 using System.Drawing;
 using Microsoft.AspNetCore.Hosting;
-using StoreFront.UI.MVC.Utilities;
+using StoreFront.Utilities;
 
-namespace StoreFront.UI.MVC.Controllers
+namespace StoreFront.Controllers
 {
     public class ProductsController : Controller
     {

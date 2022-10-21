@@ -13,7 +13,7 @@ using System.Drawing; //Added for access to the Image class
 
 
 
-namespace StoreFront.UI.MVC.Controllers
+namespace StoreFront.Controllers
 {
     public class ProductStockStatusController : Controller
     {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
-using StoreFront.UI.MVC.Data;
+using StoreFront.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

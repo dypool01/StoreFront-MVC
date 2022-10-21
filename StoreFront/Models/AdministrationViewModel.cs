@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StoreFront.UI.MVC.Models
+namespace StoreFront.Models
 {
     public class CreateRoleViewModel
     {
