@@ -19,7 +19,7 @@ namespace StoreFront.DATA.EF.Models
         public string? ProductImage { get; set; }
 
         public virtual Category? Category { get; set; }
-        public virtual ProductStockStatus Status { get; set; }
+        public virtual ProductStockStatus? Status { get; set; }
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }
