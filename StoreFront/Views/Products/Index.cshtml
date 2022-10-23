@@ -1,40 +1,14 @@
 ﻿@model IEnumerable<StoreFront.DATA.EF.Models.Product>
 
 @{
-    ViewData["Title"] = "Shop Equipment";
+    ViewData["Title"] = "Equipment";
 }
 
-@*
-        Steps to implement Datatables (for client-side search, filter, & page)
-    1) (_Layout) add the <script> for jQuery.js -- ONLY if it doesn't already exist
-    2) (_Layout) add the <script> for datatables.js (found on the plugin's website - either available from CDN or file download)
-    3) (_Layout) add the <link> for datatables.css (if required - some plugins do not require any CSS)
-    4) (Index) add/modify your HTML to fit the requirements of the plugin
-    - Here, we use Datatables with the default scaffolded <table> from EF - we don't need to make any adjustments
-    to implement the basic datatables functionality
-    5) (Index) call the plugin function from @section Scripts { }
-    6) (optional - CSS or Plugin Function) Customize the plugin - update styles, modifying the default implementation
-*@
-
-@*<h1>Index</h1>*@
-
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
-
-<section class="product_section layout-padding">
-    <div class="container">
-        <div class="heading_container heading_center">
-            <h2>
-                Shop <span>Equipment</span>
-            </h2>
+<h1>@ViewData["Title"]</h1>
 
 <p align="center">
     @if (User.IsInRole("Admin"))
     {
-        //The pipe delimiters (|) that were outside of the <a> tags were causing intellisense to
-        //assume we were switching BACK to C# mode.
-        //To make sure intellisense renders these as text and NOT c#, we can wrap everything in a <span>
         <span>
             <a asp-action="Create">Add New Equipment</a> |
             <a asp-action="Discontinued">Discontinued Equipment</a> |
@@ -43,13 +17,14 @@
     <a asp-action="TiledProducts">Tile View</a>
 </p>
 
-        </div>
-
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuantityPerUnit)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UnitPrice)
@@ -58,14 +33,11 @@
                 @Html.DisplayNameFor(model => model.ProductImage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category.CategoryName)
+                @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status.Discontinued)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
-           @* <th>
-                @Html.DisplayNameFor(model => )
-            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -75,34 +47,32 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
-            @*<td>
+            <td>
                 @Html.DisplayFor(modelItem => item.QuantityPerUnit)
-            </td>*@
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UnitPrice)
             </td>
             <td>
-                @*@Html.DisplayFor(modelItem => item.ProductImage)*@
-                <img src="~/img/@item.ProductImage" class="card-img" alt="@item.ProductName" />
+                @Html.DisplayFor(modelItem => item.ProductImage)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.Discontinued)
+                @Html.DisplayFor(modelItem => item.Status.StatusId)
             </td>
-
             <td>
-            @if (User.IsInRole("Admin"))
-                {
-                    <span>
-                        <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    </span>
-                }
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-            @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin"))
                     {
-                        @if (item.StatusId == 3)//item.Status.Discontinued retrieves any related records for the Product
+                        <span>
+                            <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                        </span>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @if (item.OrderProducts.Count() == 0)//item.OrderProducts retrieves any related records for the Product
                         {
                             <span>|</span>
                             <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
@@ -110,21 +80,18 @@
                         else
                         {
                             <span>|</span>
-                            <a disables="disabled" class="text-danger text-decoration-line-through"
-                            title="Cannot delete this Equipment item as it is referenced by an Order">
-                               Delete
-                        </a>
+                            <a disabled="disabled" class="text-danger text-decoration-line-through"
+                   title="Cannot delete this Equipment as it is referenced by an Order">
+                                Delete
+                            </a>
                         }
                     }
-                
             </td>
         </tr>
 }
     </tbody>
 </table>
 
-    </div>
-</section>
 
 @section Scripts{
     <script>
