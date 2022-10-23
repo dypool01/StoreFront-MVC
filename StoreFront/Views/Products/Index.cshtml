@@ -77,6 +77,24 @@
                         </span>
                     }
                     <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                            <div class="option_container">
+                                <div class="options">
+                                    <span>|</span>
+                                    @if (item.QuantityPerUnit > 0)
+                                    {
+                                        <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="option2">
+                                            Add To Cart
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a disabled="true" class="option2">
+                                            Out of Stock
+                                        </a>
+                                    }
+
+                                </div>
+                            </div>
                     @if (User.IsInRole("Admin"))
                     {
                         @if (item.OrderProducts.Count() == 0)//item.OrderProducts retrieves any related records for the Product
