@@ -154,7 +154,7 @@ namespace StoreFront.Controllers
                         //Retrieve the path to wwwroot
                         string webRootPath = _webHostEnvironment.WebRootPath;
                         //variable for the full image path --> this is where we will save the image
-                        string fullImagePath = webRootPath + "/img/";
+                        string fullImagePath = webRootPath + "/images/";
 
                         //Create a MemoryStream to read the image into the server memory
                         using (var memoryStream = new MemoryStream())
@@ -252,7 +252,7 @@ namespace StoreFront.Controllers
                         product.ProductImage = Guid.NewGuid() + ext;
                         //build our file path to save the image
                         string webRootPath = _webHostEnvironment.WebRootPath;
-                        string fullPath = webRootPath + "/img/";
+                        string fullPath = webRootPath + "/images/";
 
                         //Delete the old image
                         

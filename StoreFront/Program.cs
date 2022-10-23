@@ -22,6 +22,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(20);//how long the session will be stored in memory
+    options.Cookie.HttpOnly = true;//allow us to set cookie options
+    options.Cookie.IsEssential = true;//can't be declined - if someone wants to use our site, must accept this cookie for session    
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,6 +46,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
