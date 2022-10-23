@@ -6,21 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
+using Microsoft.AspNetCore.Identity;
+using StoreFront.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreFront.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly StoreFrontContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public OrdersController(StoreFrontContext context)
+        public OrdersController(StoreFrontContext context, IWebHostEnvironment webHostEnvironment, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
         // GET: Orders
         public async Task<IActionResult> Index()
         {
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
             var storeFrontContext = _context.Orders.Include(o => o.User);
             return View(await storeFrontContext.ToListAsync());
         }
@@ -41,13 +49,25 @@ namespace StoreFront.Controllers
                 return NotFound();
             }
 
+            #region Prevent users from accessing orders that do not belong to them
+            // This will prevent any user from trying to 'hack' the URL to get access to someone else's order details.
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+
+            if (order.UserId != userId)
+            {
+                // If the id for the currently logged in user does not match the user id of the order record, send the user back to the Orders Index
+                return RedirectToAction("Index", "Orders");
+            }
+            #endregion
+
             return View(order);
         }
 
         // GET: Orders/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "UserId");
+            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "FullName");
             return View();
         }
 
@@ -56,6 +76,7 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Order order)
         {
             if (ModelState.IsValid)
@@ -64,11 +85,12 @@ namespace StoreFront.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "UserId", order.UserId);
+            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "FullName", order.UserId);
             return View(order);
         }
 
         // GET: Orders/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Orders == null)
@@ -81,7 +103,7 @@ namespace StoreFront.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "UserId", order.UserId);
+            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "FullName", order.UserId);
             return View(order);
         }
 
@@ -90,6 +112,7 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Order order)
         {
             if (id != order.OrderId)
@@ -117,11 +140,12 @@ namespace StoreFront.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "UserId", order.UserId);
+            ViewData["UserId"] = new SelectList(_context.UserDetails, "UserId", "FullName", order.UserId);
             return View(order);
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Orders == null)
@@ -143,6 +167,7 @@ namespace StoreFront.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Orders == null)

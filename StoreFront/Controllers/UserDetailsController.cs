@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +16,23 @@ namespace StoreFront.Controllers
     {
         private readonly StoreFrontContext _context;
 
-        public UserDetailsController(StoreFrontContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public UserDetailsController(StoreFrontContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+
+            _userManager = userManager;
         }
 
         // GET: UserDetails
+        [Authorize(Roles = "Admin")]
+        
         public async Task<IActionResult> Index()
         {
-              return View(await _context.UserDetails.ToListAsync());
+            return _context.UserDetails != null ?
+                          View(await _context.UserDetails.ToListAsync()) :
+                          Problem("Entity set 'GadgetStore03222022Context.UserDetails'  is null.");
         }
 
         // GET: UserDetails/Details/5

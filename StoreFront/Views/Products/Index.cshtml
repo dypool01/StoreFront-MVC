@@ -6,6 +6,10 @@
 
 <h1>@ViewData["Title"]</h1>
 
+
+<section class="product_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
 <p align="center">
     @if (User.IsInRole("Admin"))
     {
@@ -16,6 +20,8 @@
     }
     <a asp-action="TiledProducts">Tile View</a>
 </p>
+
+        </div>
 
 <table class="table">
     <thead>
@@ -53,14 +59,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UnitPrice)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductImage)
-            </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.ProductImage)*@
+                            <img src="~/img/@item.ProductImage" class="img-fluid" alt="@item.ProductName" />
+                        </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.StatusId)
+                @Html.DisplayFor(modelItem => item.Status.StatusName)
             </td>
             <td>
                     @if (User.IsInRole("Admin"))
@@ -91,7 +98,8 @@
 }
     </tbody>
 </table>
-
+    </div>
+</section>
 
 @section Scripts{
     <script>

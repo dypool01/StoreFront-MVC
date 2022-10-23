@@ -28,14 +28,16 @@ namespace StoreFront.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Status);
-            return View(await storeFrontContext.ToListAsync());
+            var products = _context.Products.Where(p => p.StatusId != 3 && p.StatusId != 4)
+
+                .Include(p => p.Category).Include(p => p.OrderProducts);
+            return View(await products.ToListAsync());
         }// Allows anyone to view product list without being logged in.
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Discontinued()
         {
-            var products = _context.Products.Where(p => p.StatusId == 3)
+            var products = _context.Products.Where(p => p.StatusId == 3 || p.StatusId == 4)
 
             .Include(p => p.Category).Include(p => p.OrderProducts);
             return View(await products.ToListAsync());
@@ -47,7 +49,7 @@ namespace StoreFront.Controllers
             int pageSize = 6;// our tiled view displays rows of 3 products, so this will indicate how many total products to show on a page
 
 
-            var products = _context.Products.Where(p => !p.Status.Discontinued)
+            var products = _context.Products.Where(p => p.StatusId != 3 && p.StatusId != 4)
                 .Include(p => p.Category).Include(p => p.OrderProducts).ToList();
 
 
@@ -124,20 +126,79 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId,ProductImage")] Product product)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId,ProductImage,Image")] Product product)
         {
             if (ModelState.IsValid)
             {
+                #region File Upload - CREATE
+                //Check to see if a file was uploaded
+                if (product.Image != null)
+                {
+                    //Check the file type 
+                    //- retrieve the extension of the uploaded file
+                    string ext = Path.GetExtension(product.Image.FileName);
+
+                    //- Create a list of valid extensions to check against
+                    string[] validExts = { ".jpeg", ".jpg", ".gif", ".png" };
+
+                    //- verify the uploaded file has an extension matching one of the extensions in the list above
+                    //- AND verify file size will work with our .NET app
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)//underscores don't change the number, they just make it easier to read
+                    {
+                        //Generate a unique filename
+                        product.ProductImage = Guid.NewGuid() + ext;
+
+                        //Save the file to the web server (here, saving to wwwroot/images)
+                        //To access wwwroot, add a property to the controller for the _webHostEnvironment (see the top of this class for our example)
+                        //Retrieve the path to wwwroot
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+                        //variable for the full image path --> this is where we will save the image
+                        string fullImagePath = webRootPath + "/img/";
+
+                        //Create a MemoryStream to read the image into the server memory
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);//transfer file from the request to server memory
+                            using (var img = Image.FromStream(memoryStream))//add a using statement for the Image class (using System.Drawing)
+                            {
+                                //now, send the image to the ImageUtility for resizing and thumbnail creation
+                                //items needed for the ImageUtility.ResizeImage()
+                                //1) (int) maximum image size
+                                //2) (int) maximum thumbnail image size
+                                //3) (string) full path where the file will be saved
+                                //4) (Image) an image
+                                //5) (string) filename
+                                int maxImageSize = 500;//in pixels
+                                int maxThumbSize = 100;
+
+                                ImageUtility.ResizeImage(fullImagePath, product.ProductImage, img, maxImageSize, maxThumbSize);
+                                //myFile.Save("path/to/folder", "filename"); - how to save something that's NOT an image
+
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //If no image was uploaded, assign a default filename
+                    //Will also need to download a default image and name it 'noimage.png' -> copy it to the /images folder
+                    product.ProductImage = "_MissingHeadshot.jpg";
+                }
+
+                #endregion
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["StatusId"] = new SelectList(_context.ProductStockStatuses, "StatusId", "StatusId", product.StatusId);
+            ViewData["StatusId"] = new SelectList(_context.ProductStockStatuses, "StatusId", "StatusName", product.StatusId);
             return View(product);
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -151,7 +212,7 @@ namespace StoreFront.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["StatusId"] = new SelectList(_context.ProductStockStatuses, "StatusId", "StatusId", product.StatusId);
+            ViewData["StatusId"] = new SelectList(_context.ProductStockStatuses, "StatusId", "StatusName", product.StatusId);
             return View(product);
         }
 
@@ -160,7 +221,8 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId,ProductImage")] Product product)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,CategoryId,QuantityPerUnit,UnitPrice,StatusId,ProductImage,Image")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -169,6 +231,52 @@ namespace StoreFront.Controllers
 
             if (ModelState.IsValid)
             {
+
+                #region EDIT File Upload
+                //retain old image file name so we can delete if a new file was uploaded
+                string oldImageName = product.ProductImage;
+
+                //Check if the user uploaded a file
+                if (product.Image != null)
+                {
+                    //get the file's extension
+                    string ext = Path.GetExtension(product.Image.FileName);
+
+                    //list valid extensions
+                    string[] validExts = { ".jpeg", ".jpg", ".png", ".gif" };
+
+                    //check the file's extension against the list of valid extensions
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {
+                        //generate a unique file name
+                        product.ProductImage = Guid.NewGuid() + ext;
+                        //build our file path to save the image
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+                        string fullPath = webRootPath + "/img/";
+
+                        //Delete the old image
+                        
+                        if (oldImageName != "_MissingHeadshot.jpg")
+                        {
+                            ImageUtility.Delete(fullPath, oldImageName);
+                        }
+
+                        //Save the new image to webroot
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);
+                            using (var img = Image.FromStream(memoryStream))
+                            {
+                                int maxImageSize = 500;
+                                int maxThumbSize = 100;
+                                ImageUtility.ResizeImage(fullPath, product.ProductImage, img, maxImageSize, maxThumbSize);
+                            }
+                        }
+
+                    }
+                }
+                #endregion
+
                 try
                 {
                     _context.Update(product);
@@ -188,11 +296,12 @@ namespace StoreFront.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["StatusId"] = new SelectList(_context.ProductStockStatuses, "StatusId", "StatusId", product.StatusId);
+            ViewData["StatusId"] = new SelectList(_context.ProductStockStatuses, "StatusId", "StatusName", product.StatusId);
             return View(product);
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Products == null)
@@ -215,6 +324,7 @@ namespace StoreFront.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Products == null)
