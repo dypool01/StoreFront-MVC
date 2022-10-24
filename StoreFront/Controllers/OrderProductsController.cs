@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: OrderProducts
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var storeFrontContext = _context.OrderProducts.Include(o => o.Order).Include(o => o.Product);
@@ -26,6 +29,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: OrderProducts/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.OrderProducts == null)
@@ -46,6 +50,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: OrderProducts/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "ShipCity");
@@ -58,6 +63,7 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("OrderProductId,ProductId,OrderId,Quantity,ProductPrice")] OrderProduct orderProduct)
         {
             if (ModelState.IsValid)
@@ -72,6 +78,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: OrderProducts/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.OrderProducts == null)
@@ -94,6 +101,7 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("OrderProductId,ProductId,OrderId,Quantity,ProductPrice")] OrderProduct orderProduct)
         {
             if (id != orderProduct.OrderProductId)
@@ -127,6 +135,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: OrderProducts/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.OrderProducts == null)
@@ -149,6 +158,7 @@ namespace StoreFront.Controllers
         // POST: OrderProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.OrderProducts == null)

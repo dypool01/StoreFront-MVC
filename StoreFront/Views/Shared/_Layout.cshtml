@@ -35,9 +35,9 @@
                 </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="~/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a> </li>
+                    <li class="nav-item"><a class="nav-link" aria-current="page" href="~/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-action="Contact" asp-controller="ContactViewModels">Contact</a></li>
                     @if (signInManager.IsSignedIn(User))
                     {
                         //checks to make sure that someone is logged in if they are to view this HTML
@@ -52,11 +52,16 @@
                     <partial name="_LoginPartial" />
                 </ul>
                 <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
+@*                    <button class="btn btn-outline-dark" type="submit">*@
+                        <i class="btn btn-outline-dark bi-cart-fill me-1">
+                            <a class="text-dark nav-item" asp-action="Index" asp-controller="ShoppingCart">
+                                Cart
+                            </a>
+                        </i>
+                        
+                        
+                        @*@Html.ActionLink("Cart", "Index", "ShoppingCart")*@
+@*                    </button>*@
                 </form>
             </div>
         </div>
@@ -79,9 +84,9 @@
                                 <a href="~/"><img width="210" src="~/images/Final-Fantasy-Thumbnail.png" alt="#" /></a>
                             </div>
                             <div class="information_f">
-                                <p><strong>ADDRESS:</strong> 28 White tower, Street Name New York City, USA</p>
-                                <p><strong>TELEPHONE:</strong> +91 987 654 3210</p>
-                                <p><strong>EMAIL:</strong> yourmain@gmail.com</p>
+                                <p><strong>ADDRESS:</strong> 321 Building C, NotA St. NoWheresVille, USA</p>
+                                <p><strong>TELEPHONE:</strong> +1 123 456 7890</p>
+                                <p><strong>EMAIL:</strong> dypool01@wsc.edu</p>
                             </div>
                         </div>
                     </div>
@@ -93,12 +98,20 @@
                                         <div class="widget_menu">
                                             <h3>Menu</h3>
                                             <ul>
-                                                <li><a href="#">Home</a></li>
-                                                <li><a href="#">About</a></li>
-                                                <li><a href="#">Services</a></li>
-                                                <li><a href="#">Testimonial</a></li>
-                                                <li><a href="#">Blog</a></li>
-                                                <li><a href="#">Contact</a></li>
+                                                <li><a href="~/">Home</a></li>
+                                                <li>@Html.ActionLink("Contact", "Contact", "ContactViewModels")</li>
+                                                <li><a asp-action="Index" asp-controller="Products">Shop</a></li>
+                                                @if (signInManager.IsSignedIn(User))
+                                                {
+                                                    //checks to make sure that someone is logged in if they are to view this HTML
+                                                    //FOR THIS TO WORK, refer to the 2 lines at the top of this view.
+                                                    <li>
+                                                        <a asp-action="Index" asp-controller="Orders">
+                                                            Orders
+                                                        </a>
+                                                    </li>
+
+                                                }
                                             </ul>
                                         </div>
                                     </div>
@@ -106,18 +119,37 @@
                                         <div class="widget_menu">
                                             <h3>Account</h3>
                                             <ul>
-                                                <li><a href="#">Account</a></li>
-                                                <li><a href="#">Checkout</a></li>
-                                                <li><a href="#">Login</a></li>
-                                                <li><a href="#">Register</a></li>
-                                                <li><a href="#">Shopping</a></li>
-                                                <li><a href="#">Widget</a></li>
+                                                <li>@Html.ActionLink("Checkout", "Index", "ShoppingCart")</li>
+                                                @if (signInManager.IsSignedIn(User))
+                                                {
+                                                            <li>
+                                                                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                                    Logout
+                                                                </a>
+                                                            </li>
+                                                    
+                                                }
+                                                else
+                                                {
+                                                            <li>
+                                                                <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                                            </li>
+                                                            <li>
+                                                                <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                                            </li>
+                                                }
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <li>
+                                                        <a asp-action="ListRoles" asp-controller="Administration">Administration</a>
+                                                    </li>
+                                                }
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                           @* <div class="col-md-5">
                                 <div class="widget_menu">
                                     <h3>Newsletter</h3>
                                     <div class="information_f">
@@ -134,7 +166,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
