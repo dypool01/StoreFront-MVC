@@ -25,12 +25,14 @@ namespace StoreFront.Controllers
         }
 
         // GET: ProductStockStatus
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
               return View(await _context.ProductStockStatuses.ToListAsync());
         }
 
         // GET: ProductStockStatus/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductStockStatuses == null)
@@ -49,6 +51,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: ProductStockStatus/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -59,6 +62,7 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("StatusId,LimitedStock,ReStocking,Discontinued")] ProductStockStatus productStockStatus)
         {
             if (ModelState.IsValid)
@@ -71,6 +75,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: ProductStockStatus/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ProductStockStatuses == null)
@@ -91,6 +96,7 @@ namespace StoreFront.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("StatusId,LimitedStock,ReStocking,Discontinued")] ProductStockStatus productStockStatus)
         {
             if (id != productStockStatus.StatusId)
@@ -122,6 +128,7 @@ namespace StoreFront.Controllers
         }
 
         // GET: ProductStockStatus/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ProductStockStatuses == null)
@@ -142,6 +149,7 @@ namespace StoreFront.Controllers
         // POST: ProductStockStatus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ProductStockStatuses == null)

@@ -26,10 +26,11 @@ namespace StoreFront.Controllers
         }
 
         // GET: Orders
+        
         public async Task<IActionResult> Index()
         {
             string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
-            var storeFrontContext = _context.Orders.Include(o => o.User);
+            var storeFrontContext = _context.Orders.Where(o => o.UserId == userId).Include(o => o.User);
             return View(await storeFrontContext.ToListAsync());
         }
 
