@@ -26,23 +26,23 @@
     <div id="page-container">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div id="content-wrap" class="container px-4 px-lg-5">
+        <div id="content-wrap" class="container-fluid container px-4 px-lg-5">
             <a class="navbar-brand" href="~/">
                 <img src="~/images/Final-Fantasy-Thumbnail.png" />
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+@*            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class=""></span>
-                </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" aria-current="page" href="~/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="Contact" asp-controller="ContactViewModels">Contact</a></li>
+                </button>*@
+            <div class="d-inline-flex" @*class="collapse navbar-collapse"*@ @*id="navbarSupportedContent"*@>
+                <ul class="navbar-nav list-group-horizontal me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item list-group-item"><a class="nav-link" aria-current="page" href="~/">Home</a></li>
+                    <li class="nav-item list-group-item"><a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a></li>
+                    <li class="nav-item list-group-item"><a class="nav-link" asp-action="Contact" asp-controller="ContactViewModels">Contact</a></li>
                     @if (signInManager.IsSignedIn(User))
                     {
                         //checks to make sure that someone is logged in if they are to view this HTML
                         //FOR THIS TO WORK, refer to the 2 lines at the top of this view.
-                        <li class="nav-item">
+                        <li class="nav-item list-group-item">
                             <a class="nav-link" asp-action="Index" asp-controller="Orders">
                                 Orders
                             </a>
@@ -50,19 +50,21 @@
 
                     }
                     <partial name="_LoginPartial" />
-                </ul>
+                        <li class="nav-item list-group-item">
                 <form class="d-flex">
-@*                    <button class="btn btn-outline-dark" type="submit">*@
-                        <i class="btn btn-outline-dark bi-cart-fill me-1">
-                            <a class="text-dark nav-item" asp-action="Index" asp-controller="ShoppingCart">
-                                Cart
+
+                            <a class="text-dark" asp-action="Index" asp-controller="ShoppingCart">
+                        <i class="btn btn-outline-dark bi-cart-fill me-1"></i>
                             </a>
-                        </i>
+
+
                         
                         
                         @*@Html.ActionLink("Cart", "Index", "ShoppingCart")*@
 @*                    </button>*@
                 </form>
+                        </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -76,7 +78,7 @@
     </div>
     <!-- Footer-->
     <footer>
-            <div class="container">
+            <div class="container pt-4">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="full">
@@ -91,7 +93,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <div class="row">
+                        <div class="row justify-content-end">
                             <div class="col-md-7">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -119,7 +121,7 @@
                                         <div class="widget_menu">
                                             <h3>Account</h3>
                                             <ul>
-                                                <li>@Html.ActionLink("Checkout", "Index", "ShoppingCart")</li>
+                                                <li>@Html.ActionLink("Checkout", "Index", "ShoppingCart", new {area = ""})</li>
                                                 @if (signInManager.IsSignedIn(User))
                                                 {
                                                             <li>
@@ -146,36 +148,23 @@
                                                 }
                                             </ul>
                                         </div>
-                                    </div>
+                                  </div>
                                 </div>
                             </div>
-                           @* <div class="col-md-5">
-                                <div class="widget_menu">
-                                    <h3>Newsletter</h3>
-                                    <div class="information_f">
-                                        <p>Subscribe by our newsletter and get update protidin.</p>
-                                    </div>
-                                    <div class="form_sub">
-                                        <form>
-                                            <fieldset>
-                                                <div class="field">
-                                                    <input type="email" placeholder="Enter Your Mail" name="email" />
-                                                    <input type="submit" value="Subscribe" />
-                                                </div>
-                                            </fieldset>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>*@
                         </div>
                     </div>
                 </div>
             </div>
     </footer>
-        <div class="cpy_">
-            <p class="bg-dark mx-auto text-center text-white"> Copyright &copy; Final Fantasy @DateTime.Now.Year</p>
-            </div>
 
+   @*     <div class="cpy_">
+            <p class="bg-dark mx-auto text-center text-white"> Copyright &copy; Final Fantasy @DateTime.Now.Year</p>
+            </div>*@
+
+    </div>
+
+    <div class="cpy_">
+        <p class="bg-dark mx-auto text-center text-white"> Copyright &copy; Final Fantasy @DateTime.Now.Year</p>
     </div>
 
     <!-- jQery -->

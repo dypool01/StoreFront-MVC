@@ -45,7 +45,7 @@
                     the 'name' attribute of this textbox MUST match the parameter name in the TiledProducts() action.
                     *@
                     <input type="text" name="searchTerm" placeholder="Search products" class="form-control text-center" value="@ViewBag.SearchTerm" />
-                    <input type="submit" value="Apply Filter" class="mt-3 offset-3 btn btn-primary w-50 d-block" />
+                    <input type="submit" value="Apply Filter" class="mt-3 mb-3 offset-3 btn btn-primary w-50 d-block" />
                 </form>
 
                 @if (ViewBag.NbrResults != null)
@@ -63,12 +63,12 @@
                     <div class="box">
                         <div class="option_container">
                             <div class="options">
-                                <a asp-action="Details" asp-route-id="@item.ProductId" class="option1">
-                                    @item.ProductName
+                                <a asp-action="Details" asp-route-id="@item.ProductId" class="option1 btn btn-dark">
+                                    Details
                                 </a>
                                 @if (item.QuantityPerUnit > 0)
                                 {
-                                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="option2">
+                                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="option2 btn btn-outline-dark">
                                     Add To Cart
                                 </a>
                                 }
@@ -97,7 +97,7 @@
 
             }
 
-            <div class="row mt-5">
+            <div class="row mb-5 mt-5">
                 <div class="w-50 mx-auto text-center">
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
                     <div class="w-100">
@@ -107,11 +107,11 @@
             </div>
 
         </div>
-        <div class="btn-box">
+ @*       <div class="btn-box">
             <a asp-action="TiledProducts">
                 View All Products
             </a>
-        </div>
+        </div>*@
     </div>
 </section>
 <!-- end product section -->
