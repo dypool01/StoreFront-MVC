@@ -73,16 +73,16 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <span>
-                            <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                            <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-dark mb-1">Edit</a>
                         </span>
                     }
-                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-dark mb-1">Details</a>
                             <div class="option_container">
                                 <div class="options">
-                                    <span>|</span>
+                     @*               <span>|</span>*@
                                     @if (item.QuantityPerUnit > 0)
                                     {
-                                        <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="option2">
+                                        <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="option2 btn btn-dark mb-1">
                                             Add To Cart
                                         </a>
                                     }
@@ -99,13 +99,13 @@
                     {
                         @if (item.OrderProducts.Count() == 0)//item.OrderProducts retrieves any related records for the Product
                         {
-                            <span>|</span>
-                            <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            @*<span>|</span>*@
+                            <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-dark">Delete</a>
                         }
                         else
                         {
-                            <span>|</span>
-                            <a disabled="disabled" class="text-danger text-decoration-line-through"
+                           @* <span>|</span>*@
+                            <a disabled="disabled" class="text-secondary btn btn-dark text-decoration-line-through"
                    title="Cannot delete this Equipment as it is referenced by an Order">
                                 Delete
                             </a>
